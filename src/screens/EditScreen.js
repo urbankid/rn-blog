@@ -1,11 +1,25 @@
-import React from "react";
-import {View, Text, StyleSheet} from "react-native";
+import React, { useContext } from "react";
+import { Context } from "../context/BlogContext";
+import BlogPostForm from "../components/BlogPostForm";
 
 const EditScreen = ({ navigation }) => {
+  const id = navigation.getParam('id');
+  const { state, updateBlogPost } = useContext(Context);
+
+  const blogPost = state.find(
+    (blogPost) => blogPost.id === id
+  );
+
   return (
-    <View><Text>EditScreen #{navigation.getParam('id')}</Text></View>
+    <BlogPostForm
+      initialValues={{ title: blogPost.title, content: blogPost.content }}
+      onSubmit={(title, content) => {
+        updateBlogPost(id, title, content, () => {
+          navigation.navigate('Index');
+        })
+      }}
+    />
   );
 };
-const styles = StyleSheet.create({});
 
 export default EditScreen;
