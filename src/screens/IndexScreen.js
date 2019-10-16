@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, FlatList, Button, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList,TouchableOpacity } from "react-native";
 import {Context } from "../context/BlogContext";
 import { Feather } from "@expo/vector-icons";
 
@@ -8,7 +8,6 @@ const IndexScreen = ({navigation}) => {
 
   return (
     <View>
-      <Button title="Add Post" onPress={addBlogPost} />
       <FlatList
         data={state}
         keyExtractor={blogPost => blogPost.id.toString()}
@@ -17,7 +16,7 @@ const IndexScreen = ({navigation}) => {
           <TouchableOpacity onPress={() => navigation.navigate('Show', { id: item.id })}>
             <View style={styles.row}>
               <Text style={styles.title}>{item.title} - {item.id}</Text>
-              <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+              <TouchableOpacity onPress={() => deleteBlogPost(item.id)} style={styles.deleteButton}>
                 <Feather name="trash" style={styles.icon} />
               </TouchableOpacity>
             </View>
@@ -30,7 +29,11 @@ const IndexScreen = ({navigation}) => {
 
 IndexScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerRight: <TouchableOpacity onPress={ () => navigation.navigate('Create')}>
+    headerRight:
+      <TouchableOpacity onPress={ () => {
+      navigation.setParams({ title: 'urbankid'});
+      navigation.navigate('Create');
+    }} style={styles.headerButton}>
       <Feather name="plus" size={30} />
     </TouchableOpacity>
   };
@@ -41,12 +44,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
     borderTopWidth: 1,
     borderColor: 'gray'
   },
   title: {
-    fontSize: 18
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    marginRight: -7
+  },
+  headerButton: {
+    marginRight: 20
   },
   icon: {
     fontSize: 24
